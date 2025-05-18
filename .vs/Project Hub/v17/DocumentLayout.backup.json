@@ -174,7 +174,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Document",
@@ -188,6 +188,10 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-10T17:14:20.336Z",
               "IsPinned": true
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
             },
             {
               "$type": "Document",
@@ -235,8 +239,7 @@
               "RelativeToolTip": "Project Hub\\Controllers\\PostCategriesController.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAYwAYAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T20:01:38.519Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-12T20:01:38.519Z"
             },
             {
               "$type": "Document",
@@ -248,8 +251,7 @@
               "RelativeToolTip": "Project Hub\\Project Hub.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-05-15T20:47:34.47Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-15T20:47:34.47Z"
             },
             {
               "$type": "Document",
@@ -261,8 +263,7 @@
               "RelativeToolTip": "Project Hub\\appsettings.Development.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-12T20:44:44.962Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-12T20:44:44.962Z"
             },
             {
               "$type": "Document",
@@ -274,8 +275,7 @@
               "RelativeToolTip": "Project Hub\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-10T17:15:58.802Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-10T17:15:58.802Z"
             },
             {
               "$type": "Document",
@@ -289,6 +289,10 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-10T17:47:55.02Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
@@ -337,10 +341,6 @@
               "ViewState": "AgIAAJcAAAAAAAAAAAAAAKgAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-10T13:46:15.721Z"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
