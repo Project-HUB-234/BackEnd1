@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Project_Hub.Data;
 using Project_Hub.DTOs;
 using Project_Hub.Models;
@@ -113,8 +112,8 @@ namespace Project_Hub.Controllers
                     attachments.Add(image);
                 }
                 _context.Attachments.AddRange(attachments);
-               await _context.SaveChangesAsync();
-               
+                await _context.SaveChangesAsync();
+
             }
             var userInfo = await _context.Users.FindAsync(post.UserId);
             var email = new EmailDTO()

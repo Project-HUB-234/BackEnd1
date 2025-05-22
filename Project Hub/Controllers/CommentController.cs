@@ -31,19 +31,19 @@ namespace Project_Hub.Controllers
             return await _context.Comments.Where(c => c.UserId == userId).ToListAsync();
         }
 
-       
+
         [HttpPut]
         public async Task<IActionResult> UpdateComment(UpdateCommentDTO comment)
         {
-           
+
             var commentToUpdate = await _context.Comments.FindAsync(comment.CommentId);
 
             commentToUpdate.Content = comment.Content;
-            _context.Comments.Update(commentToUpdate);  
+            _context.Comments.Update(commentToUpdate);
 
             await _context.SaveChangesAsync();
 
-            
+
 
             return Ok();
         }

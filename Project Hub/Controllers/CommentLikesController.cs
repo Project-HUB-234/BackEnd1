@@ -16,12 +16,12 @@ namespace Project_Hub.Controllers
             _context = context;
         }
 
-        
+
 
         [HttpGet("{commentId}")]
         public async Task<ActionResult<List<CommentLike>>> GetCommentLike(int commentId)
         {
-            var commentLike = await _context.CommentLikes.Where(x=>x.CommentId==commentId).ToListAsync();
+            var commentLike = await _context.CommentLikes.Where(x => x.CommentId == commentId).ToListAsync();
 
             if (commentLike == null)
             {
@@ -34,7 +34,7 @@ namespace Project_Hub.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<CommentLike>> PostCommentLike(int commentId , int userId)
+        public async Task<ActionResult<CommentLike>> PostCommentLike(int commentId, int userId)
         {
             var newCommentLike = new CommentLike()
             {
@@ -63,6 +63,6 @@ namespace Project_Hub.Controllers
             return NoContent();
         }
 
- 
+
     }
 }

@@ -12,7 +12,7 @@ namespace Project_Hub.Services
         public string Password = "ovymuaaxmnogpopq";
         public EmailService()
         {
-    
+
         }
 
         public async Task SendEmailAsync(EmailDTO email)

@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Project_Hub.Data;
 using Project_Hub.DTOs;
-using Project_Hub.Models;
 using Project_Hub.Services;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Project_Hub.Controllers
@@ -23,10 +21,10 @@ namespace Project_Hub.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login([FromQuery]LoginDTO loginDTO)
+        public async Task<IActionResult> Login([FromQuery] LoginDTO loginDTO)
         {
-            var login = await _context.Logins.FirstOrDefaultAsync(x=>x.Username == loginDTO.UserName && x.PasswordHash == loginDTO.PasswordHash);
-            if(login == null)
+            var login = await _context.Logins.FirstOrDefaultAsync(x => x.Username == loginDTO.UserName && x.PasswordHash == loginDTO.PasswordHash);
+            if (login == null)
             {
                 return BadRequest(new { message = "Invalid username or password" });
             }
@@ -79,7 +77,7 @@ namespace Project_Hub.Controllers
             }
 
             string newPassword = GeneratePassword();
-           
+
             loginInfo.PasswordHash = newPassword;
 
             _context.Logins.Update(loginInfo);
@@ -99,7 +97,7 @@ namespace Project_Hub.Controllers
 
         public static string GeneratePassword()
         {
-            
+
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_=+";
             var password = new StringBuilder();
 

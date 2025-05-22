@@ -1,6 +1,5 @@
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Project_Hub.Data;
 using Project_Hub.Services;
 
@@ -22,9 +21,9 @@ namespace Project_Hub
 sqlOptions.EnableRetryOnFailure()));
 
 
-           
 
-        builder.Services.AddScoped<ImageService>();
+
+            builder.Services.AddScoped<ImageService>();
             builder.Services.AddScoped<EmailService>();
 
             builder.Services.AddCors(corsOptions =>

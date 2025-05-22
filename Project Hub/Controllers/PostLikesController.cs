@@ -20,10 +20,10 @@ namespace Project_Hub.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<List<PostLike>>> GetPostLikesById(int postId)
         {
-            return await _context.PostLikes.Where(x=>x.PostId == postId).ToListAsync();
+            return await _context.PostLikes.Where(x => x.PostId == postId).ToListAsync();
         }
 
-        
+
         [HttpGet("ByUser/{userId}")]
         public async Task<ActionResult<List<PostLike>>> GetLikesByUser(int userId)
         {
@@ -31,7 +31,7 @@ namespace Project_Hub.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPostLike([FromBody]int postId , int userId)
+        public async Task<IActionResult> AddPostLike([FromBody] int postId, int userId)
         {
             var newLike = new PostLike()
             {
@@ -45,7 +45,7 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
-        
+
         [HttpDelete("{likeId}")]
         public async Task<IActionResult> DeletePostLike(int likeId)
         {
@@ -61,6 +61,6 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
-       
+
     }
 }

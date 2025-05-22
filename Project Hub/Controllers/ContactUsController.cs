@@ -37,7 +37,7 @@ namespace Project_Hub.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostContactUs([FromBody]AddContactUsDTO contactUs)
+        public async Task<IActionResult> PostContactUs([FromBody] AddContactUsDTO contactUs)
         {
             var newContactUs = new ContactU()
             {

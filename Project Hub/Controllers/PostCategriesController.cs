@@ -48,7 +48,7 @@ namespace Project_Hub.Controllers
                 CategoryId = postCategory.Id,
                 CategoryName = postCategory.CategoryName
             };
-             _context.PostCategories.Update(updatedCategory);
+            _context.PostCategories.Update(updatedCategory);
 
             try
             {
@@ -56,14 +56,14 @@ namespace Project_Hub.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                    return NotFound();
+                return NotFound();
             }
 
             return Ok();
         }
 
         [HttpPost]
-        public async Task<ActionResult<PostCategory>> PostPostCategory([FromBody]AddPostCategoryDTO postCategory)
+        public async Task<ActionResult<PostCategory>> PostPostCategory([FromBody] AddPostCategoryDTO postCategory)
         {
             PostCategory newCaegry = new PostCategory()
             {
@@ -84,7 +84,7 @@ namespace Project_Hub.Controllers
                 return NotFound();
             }
 
-             _context.PostCategories.Remove(postCategory);
+            _context.PostCategories.Remove(postCategory);
             await _context.SaveChangesAsync();
 
             return Ok();

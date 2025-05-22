@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Project_Hub.Models;
+﻿namespace Project_Hub.Models;
 
 public partial class Attachment
 {

@@ -23,10 +23,10 @@ namespace Project_Hub.Controllers
         }
 
         [HttpGet]
-        
+
         public async Task<ActionResult<List<UserDTO>>> GetUsers()
         {
-            return await _context.Users.Select(u=>new UserDTO
+            return await _context.Users.Select(u => new UserDTO
             {
                 Email = u.Email,
                 FirstName = u.FirstName,
@@ -63,7 +63,7 @@ namespace Project_Hub.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody]UpdateUserDTO updateUser)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO updateUser)
         {
 
             var user = await _context.Users.FindAsync(updateUser.UserId);
@@ -104,10 +104,10 @@ namespace Project_Hub.Controllers
         // POST: api/Users
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult<User>> Rigester([FromBody]RigesterDTO newUser)
+        public async Task<ActionResult<User>> Rigester([FromBody] RigesterDTO newUser)
         {
-         
-            var Existuser = await _context.Users.AnyAsync(x=>x.Email ==newUser.Email);
+
+            var Existuser = await _context.Users.AnyAsync(x => x.Email == newUser.Email);
             if (Existuser)
             {
                 return BadRequest(new { message = "User already exists" });
@@ -122,7 +122,7 @@ namespace Project_Hub.Controllers
                 RoleId = 2,
                 QuickAccessQrcode = null,
                 ProfilePicture = "localhost:7291/images/default-profile.jpg",
-                BackgroundPicture= "localhost:7291/images/default-background.png"
+                BackgroundPicture = "localhost:7291/images/default-background.png"
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -168,7 +168,7 @@ namespace Project_Hub.Controllers
             if (user != null)
             {
                 return BadRequest();
-            } 
+            }
             return Ok(user!.ProfilePicture);
         }
     }

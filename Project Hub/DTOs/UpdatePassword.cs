@@ -2,7 +2,7 @@
 {
     public class UpdatePassword
     {
-       
+
         public string? OldPassword { get; set; }
         public int? OTP { get; set; }
         public string Email { get; set; }
