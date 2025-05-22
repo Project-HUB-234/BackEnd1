@@ -94,13 +94,14 @@ namespace Project_Hub.Controllers
 
         // POST: api/Users
         [HttpPost]
-        [Route("rigester")]
+        [Route("Register")]
         public async Task<ActionResult<User>> Rigester([FromBody]RigesterDTO newUser)
         {
+         
             var Existuser = await _context.Users.AnyAsync(x=>x.Email ==newUser.Email);
             if (Existuser)
             {
-                return BadRequest("User does exist");
+                return BadRequest(new { message = "User already exists" });
             }
 
             var user = new User()
@@ -108,10 +109,10 @@ namespace Project_Hub.Controllers
                 Email = newUser.Email,
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
-                PhoneNumber = newUser.PhoneNumber,
-                RoleId = 1,
-                QuickAccessQrcode = "",
-                ProfilePicture = ""
+                PhoneNumber = null,
+                RoleId = 2,
+                QuickAccessQrcode = null,
+                ProfilePicture =null
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -125,7 +126,7 @@ namespace Project_Hub.Controllers
             _context.Logins.Add(loginData);
             await _context.SaveChangesAsync();
             //sendEmail
-            return Ok();
+            return Ok(new { message = "Registration successful" });
         }
 
         // DELETE: api/Users/5
