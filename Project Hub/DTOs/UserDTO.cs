@@ -13,5 +13,6 @@
         public string? PhoneNumber { get; set; }
 
         public string? QuickAccessQrcode { get; set; }
+        public string? BackgroundPicture { get; set; }
     }
 }

@@ -9,5 +9,6 @@
         public string PhoneNumber { get; set; }
         public IFormFile? ProfilePicture { get; set; }
         public IFormFile? QuickAccessQrcode { get; set; }
+        public IFormFile? BackgroundPicture { get; set; }
     }
 }

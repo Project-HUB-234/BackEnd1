@@ -64,7 +64,6 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
-        // DELETE: api/Comment/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {

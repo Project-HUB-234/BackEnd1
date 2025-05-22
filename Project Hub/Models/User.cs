@@ -14,6 +14,7 @@ public partial class User
     public string LastName { get; set; } = null!;
 
     public string? ProfilePicture { get; set; }
+    public string? BackgroundPicture { get; set; }
 
     public DateTime? DateJoined { get; set; }
 

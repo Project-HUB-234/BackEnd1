@@ -5,5 +5,7 @@
         public int UserId { get; set; }
         public string Content { get; set; }
         public int PostCategory { get; set; }
+
+        public List<IFormFile> PostPictures = new List<IFormFile>();
     }
 }

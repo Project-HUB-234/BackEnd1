@@ -22,7 +22,6 @@ namespace Project_Hub.Controllers
             _emailService = emailService;
         }
 
-        // GET: api/Users
         [HttpGet]
         
         public async Task<ActionResult<List<UserDTO>>> GetUsers()
@@ -35,10 +34,10 @@ namespace Project_Hub.Controllers
                 PhoneNumber = u.PhoneNumber,
                 QuickAccessQrcode = u.QuickAccessQrcode,
                 ProfilePicture = u.ProfilePicture,
+                BackgroundPicture = u.BackgroundPicture,
             }).ToListAsync();
         }
 
-        // GET: api/Users/5
         [HttpGet]
         [Route("user/{userId}")]
         public async Task<ActionResult<UserDTO>> GetUser(int userId)
@@ -57,12 +56,12 @@ namespace Project_Hub.Controllers
                 LastName = user.LastName,
                 ProfilePicture = user.ProfilePicture,
                 PhoneNumber = user.PhoneNumber,
-                QuickAccessQrcode = user.QuickAccessQrcode
+                QuickAccessQrcode = user.QuickAccessQrcode,
+                BackgroundPicture = user.BackgroundPicture,
             };
             return userDTO;
         }
 
-        // PUT: api/Users/5
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody]UpdateUserDTO updateUser)
         {
@@ -83,24 +82,35 @@ namespace Project_Hub.Controllers
             {
                 user.ProfilePicture = _imageService.UploadImage(updateUser.ProfilePicture);
             }
+            if (updateUser.BackgroundPicture != null)
+            {
+                user.ProfilePicture = _imageService.UploadImage(updateUser.BackgroundPicture);
+            }
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
-            //sendEmail
-            
+            var email = new EmailDTO()
+            {
+                Receiver = updateUser.UserName,
+                Title = "Update Profile",
+                Body = $"Dear {updateUser.FirstName} {updateUser.LastName}\n\nWe are happy to inform you that your personal data updated successfully.\n\nRegards,"
+            };
+            await _emailService.SendEmailAsync(email);
+
 
             return Ok();
         }
 
         // POST: api/Users
         [HttpPost]
-        [Route("rigester")]
+        [Route("Register")]
         public async Task<ActionResult<User>> Rigester([FromBody]RigesterDTO newUser)
         {
+         
             var Existuser = await _context.Users.AnyAsync(x=>x.Email ==newUser.Email);
             if (Existuser)
             {
-                return BadRequest("User does exist");
+                return BadRequest(new { message = "User already exists" });
             }
 
             var user = new User()
@@ -108,10 +118,11 @@ namespace Project_Hub.Controllers
                 Email = newUser.Email,
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
-                PhoneNumber = newUser.PhoneNumber,
-                RoleId = 1,
-                QuickAccessQrcode = "",
-                ProfilePicture = ""
+                PhoneNumber = null,
+                RoleId = 2,
+                QuickAccessQrcode = null,
+                ProfilePicture = "localhost:7291/images/default-profile.jpg",
+                BackgroundPicture= "localhost:7291/images/default-background.png"
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -124,11 +135,16 @@ namespace Project_Hub.Controllers
             };
             _context.Logins.Add(loginData);
             await _context.SaveChangesAsync();
-            //sendEmail
-            return Ok();
+            var email = new EmailDTO()
+            {
+                Receiver = newUser.Email,
+                Title = "Creat New Account",
+                Body = $"Dear {newUser.FirstName} {newUser.LastName}\n\nWe are happy to inform you that you have successfully created a new account on our website.\n\nRegards,"
+            };
+            await _emailService.SendEmailAsync(email);
+            return Ok(new { message = "Registration successful" });
         }
 
-        // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -154,20 +170,6 @@ namespace Project_Hub.Controllers
                 return BadRequest();
             } 
             return Ok(user!.ProfilePicture);
-        }
-
-        [HttpGet]
-        [Route("sendEmail")]
-        public async Task<string> GetString()
-        {
-            var email = new EmailDTO()
-            {
-                Body = "test test test test test test test ",
-                Receiver = "smadiahmed88@gmail.com",
-                Title = "test"
-            };
-            await _emailService.SendEmailAsync(email);
-            return "";
         }
     }
 }

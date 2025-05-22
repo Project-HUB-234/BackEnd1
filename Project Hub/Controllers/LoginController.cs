@@ -22,15 +22,13 @@ namespace Project_Hub.Controllers
             _emailService = emailService;
         }
 
-        // GET: api/Login
         [HttpGet]
-        [Route("login")]
         public async Task<IActionResult> Login([FromQuery]LoginDTO loginDTO)
         {
             var login = await _context.Logins.FirstOrDefaultAsync(x=>x.Username == loginDTO.UserName && x.PasswordHash == loginDTO.PasswordHash);
             if(login == null)
             {
-                return BadRequest();
+                return BadRequest(new { message = "Invalid username or password" });
             }
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == login.Username);
 
@@ -50,9 +48,6 @@ namespace Project_Hub.Controllers
         {
 
             var loginInfo = await _context.Logins.FirstOrDefaultAsync(x => x.Username == updatePassword.Email && x.PasswordHash == updatePassword.OldPassword);
-
-            
-
             if (loginInfo == null)
             {
                 return BadRequest();
@@ -61,6 +56,13 @@ namespace Project_Hub.Controllers
 
             _context.Logins.Update(loginInfo);
             await _context.SaveChangesAsync();
+            var email = new EmailDTO()
+            {
+                Receiver = updatePassword.Email,
+                Title = "Update Password",
+                Body = $"We are happy to inform you that your password updated successfully.\n\nRegards,"
+            };
+            await _emailService.SendEmailAsync(email);
 
             return Ok();
         }
@@ -83,7 +85,13 @@ namespace Project_Hub.Controllers
             _context.Logins.Update(loginInfo);
             await _context.SaveChangesAsync();
 
-            //sendEmail
+            var emaill = new EmailDTO()
+            {
+                Receiver = email,
+                Title = "Forget Password",
+                Body = $"We are happy to inform you that your new password is {newPassword}  .\n\nRegards,"
+            };
+            await _emailService.SendEmailAsync(emaill);
 
             return Ok();
         }

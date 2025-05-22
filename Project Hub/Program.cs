@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Project_Hub.Data;
 using Project_Hub.Services;
 
@@ -17,9 +18,23 @@ namespace Project_Hub
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
+sqlOptions.EnableRetryOnFailure()));
+
+
+           
+
+        builder.Services.AddScoped<ImageService>();
             builder.Services.AddScoped<EmailService>();
+
+            builder.Services.AddCors(corsOptions =>
+            {
+                corsOptions.AddPolicy("policy",
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -33,8 +48,12 @@ namespace Project_Hub
 
             app.UseAuthorization();
 
+            app.UseCors("policy");
 
             app.MapControllers();
+
+            app.UseStaticFiles();
+
 
             app.Run();
         }
