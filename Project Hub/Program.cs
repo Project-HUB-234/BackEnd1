@@ -20,6 +20,15 @@ namespace Project_Hub
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<ImageService>();
             builder.Services.AddScoped<EmailService>();
+
+            builder.Services.AddCors(corsOptions =>
+            {
+                corsOptions.AddPolicy("policy",
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -33,6 +42,7 @@ namespace Project_Hub
 
             app.UseAuthorization();
 
+            app.UseCors("policy");
 
             app.MapControllers();
 

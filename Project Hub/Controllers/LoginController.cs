@@ -24,13 +24,12 @@ namespace Project_Hub.Controllers
 
         // GET: api/Login
         [HttpGet]
-        [Route("login")]
         public async Task<IActionResult> Login([FromQuery]LoginDTO loginDTO)
         {
             var login = await _context.Logins.FirstOrDefaultAsync(x=>x.Username == loginDTO.UserName && x.PasswordHash == loginDTO.PasswordHash);
             if(login == null)
             {
-                return BadRequest();
+                return BadRequest(new { message = "Invalid username or password" });
             }
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == login.Username);
 
