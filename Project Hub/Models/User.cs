@@ -10,8 +10,12 @@ public partial class User
 
     public string LastName { get; set; } = null!;
 
+    public string? Brif { get; set; }
+
     public string? ProfilePicture { get; set; }
     public string? BackgroundPicture { get; set; }
+    public string? Address { get; set; }
+    public string? Job { get; set; }
 
     public DateTime? DateJoined { get; set; }
 

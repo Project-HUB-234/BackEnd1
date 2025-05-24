@@ -35,12 +35,13 @@ namespace Project_Hub.Controllers
                 QuickAccessQrcode = u.QuickAccessQrcode,
                 ProfilePicture = u.ProfilePicture,
                 BackgroundPicture = u.BackgroundPicture,
+                DateJoined = u.DateJoined,
             }).ToListAsync();
         }
 
         [HttpGet]
-        [Route("user/{userId}")]
-        public async Task<ActionResult<UserDTO>> GetUser(int userId)
+        [Route("user")]
+        public async Task<ActionResult<UserDTO>> GetUser([FromQuery] int userId)
         {
             var user = await _context.Users.FindAsync(userId);
 
@@ -58,6 +59,10 @@ namespace Project_Hub.Controllers
                 PhoneNumber = user.PhoneNumber,
                 QuickAccessQrcode = user.QuickAccessQrcode,
                 BackgroundPicture = user.BackgroundPicture,
+                DateJoined = user.DateJoined,
+                Brif = user.Brif,
+                Job = user.Job,
+                Address = user.Address
             };
             return userDTO;
         }
@@ -112,6 +117,7 @@ namespace Project_Hub.Controllers
             {
                 return BadRequest(new { message = "User already exists" });
             }
+            
 
             var user = new User()
             {
@@ -121,8 +127,10 @@ namespace Project_Hub.Controllers
                 PhoneNumber = null,
                 RoleId = 2,
                 QuickAccessQrcode = null,
-                ProfilePicture = "localhost:7291/images/default-profile.jpg",
-                BackgroundPicture = "localhost:7291/images/default-background.png"
+                ProfilePicture = "https://localhost:7291/images/default-profile.jpg",
+                BackgroundPicture = "https://localhost:7291/images/default-background.png",
+                Address = null,
+                Job = null
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

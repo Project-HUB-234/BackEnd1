@@ -25,7 +25,15 @@ namespace Project_Hub.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Posts.Include(p => p.User)
+         .Include(p => p.Attachments)
+         .Include(p => p.Comments)
+             .ThenInclude(c => c.User)
+         .Include(p => p.Comments)
+             .ThenInclude(c => c.CommentLikes)
+         .Include(p => p.Comments)
+             .ThenInclude(c => c.Attachments)
+         .ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -40,14 +48,27 @@ namespace Project_Hub.Controllers
 
             return post;
         }
-
-        [HttpGet("ByUser/{userId}")]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPostsByUser(int userId)
+        [HttpGet("ByUser")]
+        public async Task<List<Post>> GetPostsByUser([FromQuery] int userId)
         {
-            return await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
+            return await _context.Posts.Include(p => p.User)
+                .Include(pl=>pl.PostLikes)
+             .Include(p => p.Attachments)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.User)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.CommentLikes)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.Attachments)
+             .ToListAsync();
+
+
+
+
         }
 
-        [HttpPut]
+        [HttpPut("UpdatePost")]
+
         public async Task<IActionResult> UpdatePost(UpdatePostDTO updatePostDTO)
         {
 
@@ -84,8 +105,9 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Post>> AddPost(AddPostDTO post)
+        [HttpPost("AddPost")]
+
+        public async Task<ActionResult<Post>> AddPost([FromForm] AddPostDTO post)
         {
             var newPost = new Post()
             {
@@ -126,7 +148,7 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeletePost/{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
             var post = await _context.Posts.FindAsync(id);

@@ -6,6 +6,6 @@
         public string Content { get; set; }
         public int PostCategory { get; set; }
 
-        public List<IFormFile> PostPictures = new List<IFormFile>();
+        public List<IFormFile>? PostPictures { get; set; }
     }
 }

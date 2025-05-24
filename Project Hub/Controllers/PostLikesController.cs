@@ -30,8 +30,8 @@ namespace Project_Hub.Controllers
             return await _context.PostLikes.Where(pl => pl.UserId == userId).ToListAsync();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddPostLike([FromBody] int postId, int userId)
+        [HttpPost("{postId}/{userId}")]
+        public async Task<IActionResult> AddPostLike(int postId, int userId)
         {
             var newLike = new PostLike()
             {
