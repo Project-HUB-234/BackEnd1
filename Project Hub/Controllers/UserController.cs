@@ -28,6 +28,7 @@ namespace Project_Hub.Controllers
         {
             return await _context.Users.Select(u => new UserDTO
             {
+                UserId = u.UserId,
                 Email = u.Email,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
@@ -36,6 +37,9 @@ namespace Project_Hub.Controllers
                 ProfilePicture = u.ProfilePicture,
                 BackgroundPicture = u.BackgroundPicture,
                 DateJoined = u.DateJoined,
+                Brif = u.Brif,
+                Job = u.Job,
+                Address = u.Address
             }).ToListAsync();
         }
 
@@ -67,8 +71,8 @@ namespace Project_Hub.Controllers
             return userDTO;
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO updateUser)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserDTO updateUser)
         {
 
             var user = await _context.Users.FindAsync(updateUser.UserId);
@@ -79,6 +83,8 @@ namespace Project_Hub.Controllers
             user.FirstName = updateUser.FirstName;
             user.LastName = updateUser.LastName;
             user.PhoneNumber = updateUser.PhoneNumber;
+            user.Job = updateUser.Job;
+            user.Brif = updateUser.Brif;
             if (updateUser.QuickAccessQrcode != null)
             {
                 user.QuickAccessQrcode = _imageService.UploadImage(updateUser.QuickAccessQrcode);
