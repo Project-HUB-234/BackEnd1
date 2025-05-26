@@ -4,7 +4,7 @@ public partial class CommentLike
 {
     public int LikeId { get; set; }
 
-    public int? CommentId { get; set; }
+    public int CommentId { get; set; }
 
     public int? UserId { get; set; }
 

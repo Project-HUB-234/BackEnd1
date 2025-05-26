@@ -18,10 +18,13 @@ namespace Project_Hub.Controllers
 
 
 
-        [HttpGet("{commentId}")]
-        public async Task<ActionResult<List<CommentLike>>> GetCommentLike(int commentId)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<List<int>>> GetCommentLike(int userId)
         {
-            var commentLike = await _context.CommentLikes.Where(x => x.CommentId == commentId).ToListAsync();
+            var commentLike = await _context.CommentLikes
+                .Where(x => x.UserId == userId)
+                .Select(x=>x.CommentId)
+                .ToListAsync();
 
             if (commentLike == null)
             {
@@ -33,8 +36,8 @@ namespace Project_Hub.Controllers
 
 
 
-        [HttpPost]
-        public async Task<ActionResult<CommentLike>> PostCommentLike(int commentId, int userId)
+        [HttpGet("{commentId}/{userId}")]
+        public async Task<ActionResult<CommentLike>> AddCommentLike(int userId, int commentId)
         {
             var newCommentLike = new CommentLike()
             {
@@ -48,10 +51,10 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCommentLike(int id)
+        [HttpDelete("{commentId}/{userId}")]
+        public async Task<IActionResult> DeleteCommentLike(int userId , int commentId)
         {
-            var commentLike = await _context.CommentLikes.FindAsync(id);
+            var commentLike = await _context.CommentLikes.FirstOrDefaultAsync(x=>x.UserId == userId && x.CommentId == commentId);
             if (commentLike == null)
             {
                 return NotFound();

@@ -1,4 +1,4 @@
-@Project_Hub_HostAddress = http://localhost:5280
+@Project_Hub_HostAddress = http://localhost:7291
 
 GET {{Project_Hub_HostAddress}}/weatherforecast/
 Accept: application/json

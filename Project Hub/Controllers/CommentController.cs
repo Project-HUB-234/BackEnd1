@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Project_Hub.Data;
 using Project_Hub.DTOs;
 using Project_Hub.Models;
+using Project_Hub.Services;
 
 namespace Project_Hub.Controllers
 {
@@ -11,10 +12,12 @@ namespace Project_Hub.Controllers
     public class CommentController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ImageService _imageService;
 
-        public CommentController(AppDbContext context)
+        public CommentController(AppDbContext context, ImageService imageService)
         {
             _context = context;
+            _imageService = imageService;
         }
 
 
@@ -60,6 +63,17 @@ namespace Project_Hub.Controllers
             };
             _context.Comments.Add(commentToAdd);
             await _context.SaveChangesAsync();
+            if(comment.image is not null)
+            {
+                var image = new Attachment()
+                {
+                    CommentId = commentToAdd.CommentId,
+                    AttachmentPath = _imageService.UploadImage(comment.image)
+                };
+                _context.Attachments.Add(image);
+                await _context.SaveChangesAsync();
+            }
+           
 
             return Ok();
         }
@@ -67,13 +81,18 @@ namespace Project_Hub.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments
+                .Include(c=>c.CommentLikes)
+                .Include(a=>a.Attachments)
+                .FirstOrDefaultAsync(x=>x.CommentId ==id);
             if (comment == null)
             {
                 return NotFound();
             }
 
             _context.Comments.Remove(comment);
+            _context.CommentLikes.RemoveRange(comment.CommentLikes);
+            _context.Attachments.RemoveRange(comment.Attachments);
             await _context.SaveChangesAsync();
 
             return Ok();

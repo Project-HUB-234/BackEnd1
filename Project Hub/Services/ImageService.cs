@@ -43,7 +43,7 @@
                 image.CopyTo(fileStream);
             }
 
-            return $"https://localhost:7011//attachment/{uniqueFileName}";
+            return $"https://localhost:7291/images/{uniqueFileName}";
         }
 
     }

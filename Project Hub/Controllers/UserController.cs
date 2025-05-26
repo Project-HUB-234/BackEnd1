@@ -108,7 +108,7 @@ namespace Project_Hub.Controllers
 
         // POST: api/Users
         [HttpPost]
-        [Route("Register")]
+        [Route("register")]
         public async Task<ActionResult<User>> Rigester([FromBody] RigesterDTO newUser)
         {
 

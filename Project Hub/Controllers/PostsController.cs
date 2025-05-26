@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Project_Hub.Data;
 using Project_Hub.DTOs;
 using Project_Hub.Models;
@@ -33,6 +34,7 @@ namespace Project_Hub.Controllers
              .ThenInclude(c => c.CommentLikes)
          .Include(p => p.Comments)
              .ThenInclude(c => c.Attachments)
+             .OrderByDescending(x=>x.DatePosted)
          .ToListAsync();
         }
 
@@ -51,7 +53,9 @@ namespace Project_Hub.Controllers
         [HttpGet("ByUser")]
         public async Task<List<Post>> GetPostsByUser([FromQuery] int userId)
         {
-            return await _context.Posts.Include(p => p.User)
+            return await _context.Posts
+                .Where(u=>u.UserId==userId)
+                .Include(p => p.User)
                 .Include(pl=>pl.PostLikes)
              .Include(p => p.Attachments)
              .Include(p => p.Comments)
@@ -60,6 +64,7 @@ namespace Project_Hub.Controllers
                  .ThenInclude(c => c.CommentLikes)
              .Include(p => p.Comments)
                  .ThenInclude(c => c.Attachments)
+                 .OrderByDescending(x => x.DatePosted)
              .ToListAsync();
 
 
@@ -69,7 +74,7 @@ namespace Project_Hub.Controllers
 
         [HttpPut("UpdatePost")]
 
-        public async Task<IActionResult> UpdatePost(UpdatePostDTO updatePostDTO)
+        public async Task<IActionResult> UpdatePost([FromForm] UpdatePostDTO updatePostDTO)
         {
 
             var postToUpdate = await _context.Posts.FindAsync(updatePostDTO.PostId);
@@ -77,21 +82,37 @@ namespace Project_Hub.Controllers
             postToUpdate.Content = updatePostDTO.Content;
             postToUpdate.CategoryId = updatePostDTO.PostCategory;
             _context.Posts.Update(postToUpdate);
-            if (updatePostDTO.PostPictures.Count() > 0)
+            if (updatePostDTO.PostPictures is not null && updatePostDTO.PostPictures.Count() > 0)
             {
                 string imagePath = "";
                 var attachments = await _context.Attachments.Where(x => x.PostId == updatePostDTO.PostId).ToListAsync();
-                foreach (var picture in updatePostDTO.PostPictures)
+                if (attachments.Count() > 0)
                 {
-                    //imagePath = _imageService.UploadImage(picture);
-                    //var image = new Attachment()
-                    //{
-                    //    AttachmentPath = imagePath,
-                    //    PostId = newPost.PostId,
-
-                    //};
-                    //attachments.Add(image);
+                    foreach (var picture in updatePostDTO.PostPictures)
+                    {
+                        imagePath = _imageService.UploadImage(picture);
+                        attachments[0].AttachmentPath = imagePath;
+                    }
+                    _context.Attachments.UpdateRange(attachments);
                 }
+                else
+                {
+                    string newImagePath = "";
+                    List<Attachment> attachment = new List<Attachment>();
+                    foreach (var picture in updatePostDTO.PostPictures)
+                    {
+                        newImagePath = _imageService.UploadImage(picture);
+                        var image = new Attachment()
+                        {
+                            AttachmentPath = newImagePath,
+                            PostId = updatePostDTO.PostId,
+
+                        };
+                        attachment.Add(image);
+                    }
+                    _context.Attachments.AddRange(attachment);
+                }
+               
             }
             var userInfo = await _context.Users.FindAsync(postToUpdate.UserId);
             var email = new EmailDTO()
@@ -149,14 +170,25 @@ namespace Project_Hub.Controllers
         }
 
         [HttpDelete("DeletePost/{id}")]
-        public async Task<IActionResult> DeletePost(int id)
+        public async Task<IActionResult> DeletePost([FromRoute]int id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts
+                .Include(p => p.User)
+                .Include(pl => pl.PostLikes)
+             .Include(p => p.Attachments)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.User)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.CommentLikes)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.Attachments)
+                 .FirstOrDefaultAsync(u => u.PostId == id);
             if (post == null)
             {
                 return NotFound();
             }
-
+            _context.PostLikes.RemoveRange(post.PostLikes);
+            _context.Comments.RemoveRange(post.Comments);
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project_Hub.Data;
+using Project_Hub.DTOs;
 using Project_Hub.Models;
 
 namespace Project_Hub.Controllers
@@ -25,13 +26,16 @@ namespace Project_Hub.Controllers
 
 
         [HttpGet("ByUser/{userId}")]
-        public async Task<ActionResult<List<PostLike>>> GetLikesByUser(int userId)
+        public async Task<ActionResult<List<int>>> GetLikesByUser(int userId)
         {
-            return await _context.PostLikes.Where(pl => pl.UserId == userId).ToListAsync();
+            return await _context.PostLikes
+                .Where(pl => pl.UserId == userId)
+                .Select(x => x.PostId)
+                .ToListAsync();
         }
 
-        [HttpPost("{postId}/{userId}")]
-        public async Task<IActionResult> AddPostLike(int postId, int userId)
+        [HttpGet("AddLike/{postId}/{userId}")]
+        public async Task<IActionResult> AddPostLike([FromRoute]int postId, [FromRoute] int userId)
         {
             var newLike = new PostLike()
             {
@@ -46,10 +50,10 @@ namespace Project_Hub.Controllers
         }
 
 
-        [HttpDelete("{likeId}")]
-        public async Task<IActionResult> DeletePostLike(int likeId)
+        [HttpDelete("{postId}/{userId}")]
+        public async Task<IActionResult> DeletePostLike([FromRoute] int postId , [FromRoute] int userId)
         {
-            var postLike = await _context.PostLikes.FindAsync(likeId);
+            var postLike = await _context.PostLikes.FirstOrDefaultAsync(x=>x.PostId == postId && x.UserId == userId);
             if (postLike == null)
             {
                 return NotFound();
