@@ -2,6 +2,8 @@
 {
     public class UserDTO
     {
+        public int UserId { get; set; }
+
         public string Email { get; set; } = null!;
 
         public string FirstName { get; set; } = null!;
