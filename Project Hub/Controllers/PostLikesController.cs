@@ -24,6 +24,22 @@ namespace Project_Hub.Controllers
             return await _context.PostLikes.Where(x => x.PostId == postId).ToListAsync();
         }
 
+        [HttpPost("postLikeCounts")]
+        public async Task<ActionResult<IEnumerable<UserPostLikesDTO>>> GetPostLikeCounts([FromBody] List<int> id)
+        {
+            var result = await _context.PostLikes
+                .Where(x => id.Contains(x.PostId))
+                .GroupBy(x => x.PostId)
+                .Select(g => new UserPostLikesDTO
+                {
+                    PostId = g.Key,
+                    LikeCount = g.Count()
+                })
+                .ToListAsync();
+
+            return Ok(result);
+        }
+
 
         [HttpGet("ByUser/{userId}")]
         public async Task<ActionResult<List<int>>> GetLikesByUser(int userId)
