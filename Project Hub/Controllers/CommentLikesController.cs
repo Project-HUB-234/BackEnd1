@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project_Hub.Data;
+using Project_Hub.DTOs;
 using Project_Hub.Models;
 
 namespace Project_Hub.Controllers
@@ -34,6 +35,21 @@ namespace Project_Hub.Controllers
             return commentLike;
         }
 
+        [HttpPost("CommentLikeCounts")]
+        public async Task<ActionResult<IEnumerable<UserCommentLikeDTO>>> GetCommentLikeCounts([FromBody] List<int> id)
+        {
+            var result = await _context.CommentLikes
+                .Where(x => id.Contains(x.CommentId))
+                .GroupBy(x => x.CommentId)
+                .Select(g => new UserCommentLikeDTO
+                {
+                    CommentId = g.Key,
+                    LikeCount = g.Count()
+                })
+                .ToListAsync();
+
+            return Ok(result);
+        }
 
 
         [HttpGet("{commentId}/{userId}")]
