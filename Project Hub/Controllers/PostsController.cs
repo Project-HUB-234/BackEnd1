@@ -26,16 +26,19 @@ namespace Project_Hub.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            return await _context.Posts.Include(p => p.User)
-         .Include(p => p.Attachments)
-         .Include(p => p.Comments)
-             .ThenInclude(c => c.User)
-         .Include(p => p.Comments)
-             .ThenInclude(c => c.CommentLikes)
-         .Include(p => p.Comments)
-             .ThenInclude(c => c.Attachments)
-             .OrderByDescending(x=>x.DatePosted)
-         .ToListAsync();
+            var t= await _context.Posts
+                .Include(p => p.User)
+                .Include(pl => pl.PostLikes)
+             .Include(p => p.Attachments)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.User)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.CommentLikes)
+             .Include(p => p.Comments)
+                 .ThenInclude(c => c.Attachments)
+                 .OrderByDescending(x => x.DatePosted)
+             .ToListAsync();
+            return t;
         }
 
         [HttpGet("{id}")]
@@ -195,6 +198,14 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
+        [HttpPost("getallImage")]
+        public async Task<List<string>> GetAllPostImages([FromBody] List<int> ids)
+        {
+            var images = await _context.Attachments.Where(x => ids.Contains(x.PostId.Value)).Select(p=>p.AttachmentPath).ToListAsync();
 
+            return images;
+
+        }
+        
     }
 }

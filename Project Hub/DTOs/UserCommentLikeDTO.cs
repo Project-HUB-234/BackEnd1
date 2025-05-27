@@ -1,11 +1,8 @@
 ﻿namespace Project_Hub.DTOs
 {
-    public class UserPostLikesDTO
+    public class UserCommentLikeDTO
     {
-
-        public int PostId { get; set; } 
-
+        public int CommentId { get; set; }
         public int LikeCount { get; set; }
-
     }
 }
