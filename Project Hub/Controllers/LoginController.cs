@@ -42,10 +42,11 @@ namespace Project_Hub.Controllers
 
         [HttpPut]
         [Route("update-password")]
-        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePassword updatePassword)
+        public async Task<IActionResult> UpdatePassword([FromQuery] UpdatePassword updatePassword)
         {
+            var logedUser = await _context.Users.FindAsync(updatePassword.UserId);
 
-            var loginInfo = await _context.Logins.FirstOrDefaultAsync(x => x.Username == updatePassword.Email && x.PasswordHash == updatePassword.OldPassword);
+            var loginInfo = await _context.Logins.FirstOrDefaultAsync(x => x.Username == logedUser.Email && x.PasswordHash == updatePassword.OldPassword);
             if (loginInfo == null)
             {
                 return BadRequest();
@@ -56,7 +57,7 @@ namespace Project_Hub.Controllers
             await _context.SaveChangesAsync();
             var email = new EmailDTO()
             {
-                Receiver = updatePassword.Email,
+                Receiver = logedUser.Email,
                 Title = "Update Password",
                 Body = $"We are happy to inform you that your password updated successfully.\n\nRegards,"
             };

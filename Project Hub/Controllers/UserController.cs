@@ -56,6 +56,7 @@ namespace Project_Hub.Controllers
             }
             UserDTO userDTO = new UserDTO()
             {
+                UserId=user.UserId,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -82,9 +83,10 @@ namespace Project_Hub.Controllers
             }
             user.FirstName = updateUser.FirstName;
             user.LastName = updateUser.LastName;
-            user.PhoneNumber = updateUser.PhoneNumber;
-            user.Job = updateUser.Job;
-            user.Brif = updateUser.Brif;
+            user.PhoneNumber = updateUser.PhoneNumber == null || updateUser.PhoneNumber == "null" ? null : updateUser.PhoneNumber;
+            user.Job = updateUser.Job ==null || updateUser.Job == "null" ? null : updateUser.Job;
+            user.Brif = updateUser.Brif == null || updateUser.Brif == "null" ? null : updateUser.Brif;
+            user.Address = updateUser.Address == null || updateUser.Address == "null" ? null : updateUser.Address;
             if (updateUser.QuickAccessQrcode != null)
             {
                 user.QuickAccessQrcode = _imageService.UploadImage(updateUser.QuickAccessQrcode);

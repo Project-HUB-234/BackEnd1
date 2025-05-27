@@ -62,10 +62,7 @@ nunit-*.xml
 /.vs/Project Hub/v17/DocumentLayout.backup.json
 /.vs/Project Hub/CopilotIndices/17.14.670.39694/CodeChunks.db
 /.vs/Project Hub/CopilotIndices/17.14.670.39694/CodeChunks.db-wal
-/.vs/Project Hub/CopilotIndices/17.14.670.39694/SemanticSymbols.db
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/CodeChunks.db-shm
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/SemanticSymbols.db-shm
 /.vs/Project Hub/CopilotIndices/17.14.670.39694/SemanticSymbols.db-wal
-/Project Hub/wwwroot/images/516b6421-3fbe-4f71-ae0b-2554aa0a87ce_default-background.png
-/Project Hub/wwwroot/images/6e161042-62db-4fff-b549-8207c86cdcb9_default-0background.png
-/Project Hub/wwwroot/images/6db98af4-3005-46ae-8c9f-7cb563547acd_default-0background.png
-/Project Hub/wwwroot/images/93a24238-c629-4c84-85f5-8e8cd80808b1_default-profile.jpg
-/Project Hub/wwwroot/images/ea78ed1b-250f-440b-b041-3110a7344562_default-0background.png
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/SemanticSymbols.db
