@@ -60,3 +60,9 @@ nunit-*.xml
 /.vs/Project Hub/FileContentIndex/612d93ab-f179-4c9c-b358-335f02a969dc.vsidx
 *.vsidx
 /.vs/Project Hub/v17/DocumentLayout.backup.json
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/CodeChunks.db
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/CodeChunks.db-wal
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/CodeChunks.db-shm
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/SemanticSymbols.db-shm
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/SemanticSymbols.db-wal
+/.vs/Project Hub/CopilotIndices/17.14.670.39694/SemanticSymbols.db
