@@ -36,13 +36,36 @@ namespace Project_Hub.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateComment(UpdateCommentDTO comment)
+        public async Task<IActionResult> UpdateComment([FromForm]UpdateCommentDTO comment)
         {
 
             var commentToUpdate = await _context.Comments.FindAsync(comment.CommentId);
 
             commentToUpdate.Content = comment.Content;
             _context.Comments.Update(commentToUpdate);
+            if(comment.Image is not null)
+            {
+                var oldImage = await _context.Attachments.FirstOrDefaultAsync(x => x.CommentId == comment.CommentId);
+                if(oldImage is not null)
+                {
+                    oldImage.AttachmentPath = _imageService.UploadImage(comment.Image);
+                    _context.Attachments.Update(oldImage);
+                }
+                else
+                {
+                    var image = new Attachment()
+                    {
+                        AttachmentPath = _imageService.UploadImage(comment.Image),
+                        CommentId = comment.CommentId
+                    };
+                    _context.Attachments.Add(image);
+                }
+            }
+            if (comment.RemoveImage)
+            {
+                var imageToDelete = await _context.Attachments.FirstOrDefaultAsync(x => x.CommentId == comment.CommentId);
+                _context.Attachments.Remove(imageToDelete);
+            }
 
             await _context.SaveChangesAsync();
 
