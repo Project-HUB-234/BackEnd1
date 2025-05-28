@@ -206,6 +206,12 @@ namespace Project_Hub.Controllers
             return images;
 
         }
-        
+
+        [HttpGet("postCount")]
+        public async Task<int> PostCount()
+        {
+            return await _context.Posts.CountAsync();
+        }
+
     }
 }

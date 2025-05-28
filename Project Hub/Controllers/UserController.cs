@@ -187,5 +187,11 @@ namespace Project_Hub.Controllers
             }
             return Ok(user!.ProfilePicture);
         }
+
+        [HttpGet("userCount")]
+        public async Task<int> UserCount()
+        {
+            return await _context.Users.CountAsync();
+        }
     }
 }

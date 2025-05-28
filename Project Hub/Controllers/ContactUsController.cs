@@ -65,5 +65,12 @@ namespace Project_Hub.Controllers
 
             return Ok();
         }
+
+        [HttpGet("contactUCount")]
+        public async Task<int> ContactUCount()
+        {
+            return await _context.ContactUs.CountAsync();
+
+        }
     }
 }

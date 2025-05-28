@@ -90,6 +90,11 @@ namespace Project_Hub.Controllers
             return Ok();
         }
 
+        [HttpGet("categoriesCount")]
+        public async Task<int> CategoriesCount()
+        {
+            return await _context.PostCategories.CountAsync();
 
+        }
     }
 }
