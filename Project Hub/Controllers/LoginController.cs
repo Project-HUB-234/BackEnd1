@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Project_Hub.Data;
 using Project_Hub.DTOs;
 using Project_Hub.Services;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Project_Hub.Controllers
@@ -67,8 +68,8 @@ namespace Project_Hub.Controllers
         }
 
         [HttpPut]
-        [Route("forget-password/{email}")]
-        public async Task<IActionResult> ForgetPassword(string email)
+        [Route("forget-password")]
+        public async Task<IActionResult> ForgetPassword([FromQuery]string email)
         {
 
             var loginInfo = await _context.Logins.FirstOrDefaultAsync(x => x.Username == email);
@@ -79,7 +80,7 @@ namespace Project_Hub.Controllers
 
             string newPassword = GeneratePassword();
 
-            loginInfo.PasswordHash = newPassword;
+            loginInfo.PasswordHash =encrypt(newPassword);
 
             _context.Logins.Update(loginInfo);
             await _context.SaveChangesAsync();
@@ -110,6 +111,37 @@ namespace Project_Hub.Controllers
             return password.ToString();
         }
 
+        public static string encrypt(string plainText)
+        {
+
+            string keyString = "12345678901234567890123456789012"; // 32 bytes
+            string ivString = "6543210987654321"; // 16 bytes
+
+            byte[] key = Encoding.UTF8.GetBytes(keyString);
+            byte[] iv = Encoding.UTF8.GetBytes(ivString);
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = key;
+                aes.IV = iv;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                using (MemoryStream ms = new MemoryStream())
+                using (ICryptoTransform encryptor = aes.CreateEncryptor())
+                using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                {
+                    byte[] inputBytes = Encoding.UTF8.GetBytes(plainText);
+                    cs.Write(inputBytes, 0, inputBytes.Length);
+                    cs.FlushFinalBlock();
+
+                    byte[] cipherBytes = ms.ToArray();
+                    return Convert.ToBase64String(cipherBytes);
+                }
+            }
+
+        }
+        
 
     }
 
